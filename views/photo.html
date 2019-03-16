@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Галерея</title>
+    <!-- Подключаем шрифты-->
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700&amp;subset=cyrillic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Russo+One" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Подключаем bootstrap 4 -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Подключаем CSS файлы стилей-->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/gallery.css">
+</head>
+<body>
+<!-- ВСПЛЫВАЮЩЕЕ ОКНО -->
+<div class="modal fade" id="image-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img class="img-responsive center-block" src="" alt="" width="100%">
+            </div>
+        </div>
+    </div>
+</div>
+<header class="container-fluid justify-content-center pb-1 fixed-top background-dark light text-center">
+    <div class="row">
+        <div class="col-auto pt-2 pl-3">
+            <a href="/home" class="light">
+                <img src="../../img/board.png" height="40px">
+            </a>
+        </div>
+        <div class="col-auto mx-auto">
+            <a href="#" class="light scrolltop">
+                <h1>Галерея</h1>
+            </a>
+        </div>
+    </div>
+
+</header>
+<!-- Галерея -->
+<div class="container-fluid px-5" id="gallery-back">
+    <div class="row" id="gallery">
+
+    </div>
+    <div id="#loading" class="justify-content-center" style="display: none;">LOADING</div>
+</div>
+<footer class="container-fluid light background-dark py-1 px-3 small">
+    <div class="row">
+        <div class="col-12 col-sm-auto text-center">
+            <ul class="m-0">
+                <li class="m-0">
+                    <a href="/admin" class="light">Администрирование</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-12 col-sm-auto mx-auto text-center">
+            <p>
+                <span class="company-name">Скейтбординг</span>
+                <br>
+                <span class="locality">г.Томск</span>
+            </p>
+        </div>
+        <div class="col-12 col-sm-auto text-center invisible">
+            <ul class="m-0">
+                <li class="m-0">
+                    <a href="/admin" class="light">Администрирование</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<!-- jQuery -->
+<script src="../../js/jquery-3.3.1.min.js"></script>
+<!-- Bootstrap -->
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/gallery.js"></script>
+<script>
+    var numPages = 0;
+    var nextPage=1;
+    // После загрузки DOM-дерева (страницы)
+    $(function() {
+        $(document).on('click','a.scrolltop',function(e){
+            var id = $(this).attr('href');
+            if (id[0]=='#'){
+                e.preventDefault();
+                $('body,html').animate({scrollTop: 0}, 500);
+            };
+        });
+        // Загружаем кол-во страниц и первую страницу, если такая меется
+        $.ajax({
+            type: "POST",
+            url: "/getPhoto?vis=1",
+            cache: false,
+            success: function(data){
+                data = JSON.parse(data);
+                numPages = Number(data.pages);
+                if (numPages>0)
+                    upd();
+            }
+        });
+        //при нажатии на ссылку, содержащую Thumbnail
+        $(document).on("click", "a.thumbnail", function(e) {
+            //отменить стандартное действие браузера
+            e.preventDefault();
+            //присвоить атрибуту scr элемента img модального окна
+            //значение атрибута scr изображения, которое обёрнуто
+            //вокруг элемента a, на который нажал пользователь
+            //$('#image-modal .modal-body img').attr('src', $(this).find('img').attr('src'));
+            copyF($(this),$('#image-modal'));
+            //открыть модальное окно
+            $("#image-modal").modal('show');
+        });
+        //при нажатию на изображение внутри модального окна
+        //закрыть его (модальное окно)
+        $('#image-modal .modal-body img').on('click', function() {
+            $("#image-modal").modal('hide')
+        });
+        // Обрабатываем прокрутку страницы
+        $(window).scroll(function(){
+            var scrollHeight = Math.max(
+                document.body.scrollHeight, document.documentElement.scrollHeight,
+                document.body.offsetHeight, document.documentElement.offsetHeight,
+                document.body.clientHeight, document.documentElement.clientHeight
+            );
+            if (window.pageYOffset == scrollHeight - window.innerHeight && nextPage<=numPages){
+                $('#loading').show();
+                upd();
+                $('#loading').hide();
+            }
+        });
+        // Заправшиваем дополнительный контент
+        function upd()
+        {
+            $.ajax({
+                type: "GET",
+                url: "/getPhoto?vis=1&page=" + nextPage,
+                cache: false,
+                success: function(html){
+                    try {
+                        html = JSON.parse(html);
+                    }
+                    catch(e){
+                        alert('Error: ' + e.name + ':' +e.message+'\n'+e.stack);
+                    }
+                    $("#gallery").append(html.content);
+                }
+            });
+            nextPage++;
+        };
+    });
+</script>
+
+</body>
+</html>

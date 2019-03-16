@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Администрирование</title>
+    <!-- Подключаем шрифты-->
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700&amp;subset=cyrillic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Russo+One" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Подключаем bootstrap 4 -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Подключаем CSS файл стилей-->
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<header class="container-fluid justify-content-center pb-1 fixed-top background-dark light text-center">
+    <div class="row">
+        <div class="col-auto pt-2 pl-3">
+            <a href="/home">
+                <img src="../../img/board.png" height="40px">
+            </a>
+        </div>
+        <div class="col-auto mx-auto">
+            <a href="#" class="light" >
+                <h1>Администрирование</h1>
+            </a>
+        </div>
+    </div>
+</header>
+
+    <div class="container-fluid h-100" style="background-image: url(/img/york.png); background-size: cover; background-repeat: no-repeat;">
+        <div class="row h-100 align-items-center">
+            <div class="col-5 text-center">
+                <img src="../../img/admin.png" class="w-50">
+            </div>
+            <div class="col-7">
+                <ul style="font-size: 36px; color:black;">
+                    <li>
+                        <a href="/mphoto" style="color:black;">Менеджер фотографий</a>
+                    </li>
+                </ul>
+                <form method="post" style="display:none;">
+                    <input name="file" type="file" accept=".png,.jpg,.jpeg,.gif" required>
+                    <button type="submit">OK</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<footer class="container-fluid light background-dark py-1 px-3 small">
+    <div class="row">
+        <div class="col-12 col-sm-auto text-center">
+            <ul class="m-0">
+                <li class="m-0">
+                    <a href="/admin" class="light">Администрирование</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-12 col-sm-auto mx-auto text-center">
+            <p>
+                <span class="company-name">Скейтбординг</span>
+                <br>
+                <span class="locality">г.Томск</span>
+            </p>
+        </div>
+        <div class="col-12 col-sm-auto text-center invisible">
+            <ul class="m-0">
+                <li class="m-0">
+                    <a href="/admin" class="light">Администрирование</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
